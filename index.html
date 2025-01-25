@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Renovação</title>
+    <link rel="shortcut icon" href="imagem/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="icon-logo">
+            <img height="70px" src="imagem/logo.png" sizes="24" alt="">
+        </div>
+    </header>
+    <main>
+        <div class="card">
+            <h1>Renovar Desbravador</h1>
+            <form id="form-list">
+                <input type="nome" id="nome" class="input-nome" placeholder="Nome do desbravador">
+                <input type="responsavel" id="responsavel" class="input-nome" placeholder="Responsável">
+                <input type="tel" id="telefone" class="input-nome" placeholder="Telefone do responsável">
+                <button type="button" class="button" onclick="addUser()">Confirmar renovação</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>Lista dos renovados</h2>
+            <ul id="nomes-list" class="user-list">
+                <li id="apagar-mensagem">Nenhum desbravador renovado ainda.</li>
+            </ul>
+            <!-- <button class="button danger-button" onclick="clearUsers()">Limpar Lista</button> -->
+        </div>
+    </main>
+    <script src="javascript/script.js"></script>
+</body>
+</html>

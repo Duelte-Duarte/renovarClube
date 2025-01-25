@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #191917;
+    height: 100vh;
+}
+
+.icon-logo {
+    background-color: #F2B705;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.icon-logo > img {
+    padding-left: 20px;
+}
+
+.card {
+    background-color: white;
+    margin: 16px 10%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.card > h1, h2 {
+    padding: 16px;
+}
+
+.input-nome {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 16px;
+    width: 90%;
+    margin-bottom: 8px;
+}
+
+.button {
+    padding: 10px 16px;
+    background-color: #007BFF;
+    color: white;
+    margin-left: 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+.user-list {
+    list-style: none;
+    margin-left: 16px;
+    margin-bottom: 16px;
+}
