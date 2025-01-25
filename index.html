@@ -22,7 +22,7 @@
                 <input type="text" id="nome" class="input-nome" placeholder="Nome do desbravador">
                 <input type="text" id="responsavel" class="input-nome" placeholder="Responsável">
                 <input type="number" id="telefone" class="input-nome" placeholder="Telefone do responsável">
-                <button type="button" class="button" onclick="addUser()">Confirmar renovação</button>
+                <button type="button" id="confirmar-renovacao" class="button">Confirmar renovação</button>
             </form>
         </div>
         <div class="card">
@@ -34,11 +34,9 @@
     </main>
 
     <script type="module">
-        // Importação do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBTAPs-XHOpCwR3spYHbc_bHbXATd6Qhm8",
             authDomain: "renovacao-59df9.firebaseapp.com",
@@ -49,15 +47,12 @@
             measurementId: "G-3W3K2GSYGS"
         };
 
-        // Inicialização do Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Elementos DOM
         const userList = document.getElementById('nomes-list');
         const emptyMessage = document.getElementById('apagar-mensagem');
 
-        // Adicionar usuário ao Firestore
         async function addUser() {
             const nome = document.getElementById('nome').value.trim();
             const responsavel = document.getElementById('responsavel').value.trim();
@@ -71,7 +66,6 @@
                         telefone
                     });
 
-                    // Limpar os campos
                     document.getElementById('nome').value = '';
                     document.getElementById('responsavel').value = '';
                     document.getElementById('telefone').value = '';
@@ -83,7 +77,6 @@
             }
         }
 
-        // Mostrar nomes na lista
         function addUserToList(nome, responsavel, telefone) {
             const newUser = document.createElement('li');
             newUser.textContent = `Nome: ${nome}, Responsável: ${responsavel}, Telefone: ${telefone}`;
@@ -94,13 +87,10 @@
             }
         }
 
-        // Carregar usuários do Firestore e monitorar mudanças
         function loadUsers() {
             const usersCollection = collection(db, "users");
-
-            // Atualiza a lista em tempo real
             onSnapshot(usersCollection, (snapshot) => {
-                userList.innerHTML = ''; // Limpar a lista antes de renderizar
+                userList.innerHTML = '';
                 snapshot.forEach(doc => {
                     const user = doc.data();
                     addUserToList(user.nome, user.responsavel, user.telefone);
@@ -112,8 +102,8 @@
             });
         }
 
-        // Inicializar a lista ao carregar a página
         document.addEventListener('DOMContentLoaded', loadUsers);
+        document.getElementById('confirmar-renovacao').addEventListener('click', addUser);
     </script>
 </body>
 
