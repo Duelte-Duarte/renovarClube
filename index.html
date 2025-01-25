@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="shortcut icon" href="imagem/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <header>
         <div class="icon-logo">
@@ -17,8 +19,8 @@
         <div class="card">
             <h1>Renovar Desbravador</h1>
             <form id="form-list">
-                <input type="nome" id="nome" class="input-nome" placeholder="Nome do desbravador">
-                <input type="responsavel" id="responsavel" class="input-nome" placeholder="Responsável">
+                <input type="text" id="nome" class="input-nome" placeholder="Nome do desbravador">
+                <input type="text" id="responsavel" class="input-nome" placeholder="Responsável">
                 <input type="number" id="telefone" class="input-nome" placeholder="Telefone do responsável">
                 <button type="button" class="button" onclick="addUser()">Confirmar renovação</button>
             </form>
@@ -28,32 +30,91 @@
             <ul id="nomes-list" class="user-list">
                 <li id="apagar-mensagem">Nenhum desbravador renovado ainda.</li>
             </ul>
-            <!-- <button class="button danger-button" onclick="clearUsers()">Limpar Lista</button> -->
         </div>
     </main>
-    <script src="javascript/script.js"></script>
+
     <script type="module">
-        // Import the functions you need from the SDKs you need
+        // Importação do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+        // Configuração do Firebase
         const firebaseConfig = {
-          apiKey: "AIzaSyBTAPs-XHOpCwR3spYHbc_bHbXATd6Qhm8",
-          authDomain: "renovacao-59df9.firebaseapp.com",
-          projectId: "renovacao-59df9",
-          storageBucket: "renovacao-59df9.firebasestorage.app",
-          messagingSenderId: "556508719484",
-          appId: "1:556508719484:web:3f31a5c74bb3c199629cf9",
-          measurementId: "G-3W3K2GSYGS"
+            apiKey: "AIzaSyBTAPs-XHOpCwR3spYHbc_bHbXATd6Qhm8",
+            authDomain: "renovacao-59df9.firebaseapp.com",
+            projectId: "renovacao-59df9",
+            storageBucket: "renovacao-59df9.appspot.com",
+            messagingSenderId: "556508719484",
+            appId: "1:556508719484:web:3f31a5c74bb3c199629cf9",
+            measurementId: "G-3W3K2GSYGS"
         };
-      
-        // Initialize Firebase
+
+        // Inicialização do Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-      </script>
+        const db = getFirestore(app);
+
+        // Elementos DOM
+        const userList = document.getElementById('nomes-list');
+        const emptyMessage = document.getElementById('apagar-mensagem');
+
+        // Adicionar usuário ao Firestore
+        async function addUser() {
+            const nome = document.getElementById('nome').value.trim();
+            const responsavel = document.getElementById('responsavel').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+
+            if (nome && responsavel && telefone) {
+                try {
+                    await addDoc(collection(db, "users"), {
+                        nome,
+                        responsavel,
+                        telefone
+                    });
+
+                    // Limpar os campos
+                    document.getElementById('nome').value = '';
+                    document.getElementById('responsavel').value = '';
+                    document.getElementById('telefone').value = '';
+                } catch (error) {
+                    console.error("Erro ao adicionar usuário: ", error);
+                }
+            } else {
+                alert("Preencha todos os campos!");
+            }
+        }
+
+        // Mostrar nomes na lista
+        function addUserToList(nome, responsavel, telefone) {
+            const newUser = document.createElement('li');
+            newUser.textContent = `Nome: ${nome}, Responsável: ${responsavel}, Telefone: ${telefone}`;
+            userList.appendChild(newUser);
+
+            if (emptyMessage) {
+                emptyMessage.remove();
+            }
+        }
+
+        // Carregar usuários do Firestore e monitorar mudanças
+        function loadUsers() {
+            const usersCollection = collection(db, "users");
+
+            // Atualiza a lista em tempo real
+            onSnapshot(usersCollection, (snapshot) => {
+                userList.innerHTML = ''; // Limpar a lista antes de renderizar
+                snapshot.forEach(doc => {
+                    const user = doc.data();
+                    addUserToList(user.nome, user.responsavel, user.telefone);
+                });
+
+                if (snapshot.empty && !emptyMessage) {
+                    userList.innerHTML = '<li id="apagar-mensagem">Nenhum desbravador renovado ainda.</li>';
+                }
+            });
+        }
+
+        // Inicializar a lista ao carregar a página
+        document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
 </body>
+
 </html>
