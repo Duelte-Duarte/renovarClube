@@ -53,6 +53,7 @@
         const userList = document.getElementById('nomes-list');
         const emptyMessage = document.getElementById('apagar-mensagem');
 
+        // Adicionar no firestore
         async function addUser() {
             const nome = document.getElementById('nome').value.trim();
             const responsavel = document.getElementById('responsavel').value.trim();
@@ -77,6 +78,7 @@
             }
         }
 
+        // Mostrar nomes na lista
         function addUserToList(nome, responsavel, telefone) {
             const newUser = document.createElement('li');
             newUser.textContent = `Nome: ${nome}, Responsável: ${responsavel}, Telefone: ${telefone}`;
@@ -87,6 +89,7 @@
             }
         }
 
+        // Carregar do firestore
         function loadUsers() {
             const usersCollection = collection(db, "users");
             onSnapshot(usersCollection, (snapshot) => {
